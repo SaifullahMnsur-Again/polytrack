@@ -16,7 +16,6 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-24">
 
-    <!-- Top Navigation Bar -->
     <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 px-4 py-3 shadow-md flex justify-between items-center">
         <h1 class="text-xl font-bold text-emerald-400 tracking-wide">♻️ PolyTrack</h1>
         <div class="flex space-x-1">
@@ -27,12 +26,9 @@
     </header>
 
     <main class="max-w-md mx-auto p-4">
-        <!-- Toast System Alerts -->
         <div id="toast" class="hidden fixed top-16 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-600 text-white px-4 py-2 rounded-full shadow-lg text-xs transition-all duration-300"></div>
 
-        <!-- MAIN SECTION A: DASHBOARD (HISTORIES + FILTERS) -->
         <section id="sect-dashboard" class="space-y-4">
-            <!-- Global Multipurpose Filters -->
             <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 space-y-3 shadow-md">
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -45,12 +41,9 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Dynamic Timed Realtime Histories Hook -->
             <div id="history-container" class="space-y-2"></div>
         </section>
 
-        <!-- MAIN SECTION B: STATISTICS -->
         <section id="sect-stats" class="hidden space-y-4">
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl">
@@ -75,7 +68,6 @@
             </div>
         </section>
 
-        <!-- MAIN SECTION C: SETTINGS AND CONTROL PANEL -->
         <section id="sect-config" class="hidden space-y-6">
             <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3 shadow-md">
                 <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wide">Data Loss Immunity</h3>
@@ -108,17 +100,14 @@
         </section>
     </main>
 
-    <!-- FLOATING ACTION BUTTON (FAB) -->
     <div id="fab-container" class="fixed bottom-6 right-6 z-40">
         <button onclick="openBottomSheet()" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-95 transition-transform text-white">
             ➕
         </button>
     </div>
 
-    <!-- BOTTOM SHEET ENTRY COMPONENT PANEL -->
     <div id="bottom-sheet-backdrop" onclick="closeBottomSheet()" class="hidden fixed inset-0 bg-slate-950/70 z-50 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
     <div id="bottom-sheet" class="sheet-close fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-800 rounded-t-3xl border-t border-slate-700 z-50 transition-transform duration-300 overflow-hidden shadow-2xl flex flex-col" style="max-height: 65vh;">
-        <!-- Notch Header Pill -->
         <div class="w-full flex justify-center py-3 cursor-pointer" onclick="closeBottomSheet()">
             <div class="w-12 h-1 bg-slate-600 rounded-full"></div>
         </div>
@@ -157,7 +146,6 @@
         </div>
     </div>
 
-    <!-- Script Application Logic -->
     <script>
         const db = new Dexie("PolyTrackProDB");
         db.version(1).stores({
@@ -450,28 +438,12 @@
             reader.readAsText(file);
         }
 
-        // Inline Service worker configuration optimized for relative paths on GitHub Pages
+        // Service Worker registration targeting external file handle
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = 'polytrack-pro-v1';
-                    const ASSETS = [
-                        './',
-                        './index.html',
-                        'https://cdn.tailwindcss.com',
-                        'https://unpkg.com/dexie@latest/dist/dexie.js',
-                        'https://cdn.jsdelivr.net/npm/chart.js'
-                    ];
-                    self.addEventListener('install', e => {
-                        e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
-                    });
-                    self.addEventListener('fetch', e => {
-                        e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
-                    });
-                `;
-                const blob = new Blob([swCode], { type: 'application/javascript' });
-                const workerUrl = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(workerUrl).catch(err => console.log("SW execution skipped. Serve over local server or HTTPS."));
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker Registered Legally Scope:', reg.scope))
+                .catch(err => console.log('Registration skipped:', err));
             });
         }
     </script>
