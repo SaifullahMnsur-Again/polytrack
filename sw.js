@@ -1,4 +1,4 @@
-const CACHE_NAME = 'polytrack-cache-v7'; // Increment this string name whenever modifying index.html
+const CACHE_NAME = 'polytrack-cache-v8'; // Increment this value name string whenever pushing changes to index.html
 const ASSETS = [
     './',
     './index.html',
@@ -11,23 +11,22 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(ASSETS))
-            .then(() => self.skipWaiting())
+            .then(() => self.skipWaiting()) // Forces immediate entry into service loop layout maps
     );
 });
 
-// Purges legacy cached profiles automatically on operational activation shifts
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cache => {
                     if (cache !== CACHE_NAME) {
-                        console.log('Clearing old cache partition:', cache);
+                        console.log('Clearing deprecated cache partition:', cache);
                         return caches.delete(cache);
                     }
                 })
             );
-        }).then(() => self.clients.claim())
+        }).then(() => self.clients.claim()) // Immediately take control of running view panels
     );
 });
 

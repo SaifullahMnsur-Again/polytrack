@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#106b4e">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background-color: #030712; color: #f1f5f9; }
         .sheet-open { transform: translateY(0); }
         .sheet-close { transform: translateY(100%); }
         input[type="datetime-local"]::-webkit-calendar-picker-indicator {
@@ -19,208 +19,207 @@
         }
     </style>
 </head>
-<body class="min-h-screen pb-28 select-none">
+<body class="min-h-screen select-none flex justify-center items-start">
 
-    <!-- Sticky Minimal Top Header Bar -->
-    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3.5 shadow-md text-center">
-        <h1 class="text-lg font-black text-emerald-400 tracking-tight flex items-center justify-center gap-1.5">
-            <span>♻️</span> PolyTrack
-        </h1>
-    </header>
+    <!-- Parent Viewport Mockup Boundary Wrapper for Universal Desktop Alignment -->
+    <div class="w-full max-w-md min-h-screen bg-0b0f19 shadow-2xl relative border-x border-slate-900/40 pb-28 flex flex-col">
 
-    <main class="max-w-md mx-auto p-4 space-y-4">
-        <div id="toast" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-full shadow-xl text-xs tracking-wide transition-all duration-300"></div>
+        <!-- Sticky Minimal Top Header Bar -->
+        <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3.5 shadow-md text-center">
+            <h1 class="text-lg font-black text-emerald-400 tracking-tight flex items-center justify-center gap-1.5">
+                <span>♻️</span> PolyTrack
+            </h1>
+        </header>
 
-        <!-- MAIN SECTION A: DASHBOARD (MIDDLE TAB) -->
-        <section id="sect-dashboard" class="space-y-4">
-            <!-- Stats Summary Cards Matrix -->
-            <div class="grid grid-cols-3 gap-2.5">
-                <div class="bg-gradient-to-br from-emerald-600 to-teal-700 p-4 rounded-2xl shadow-lg flex flex-col justify-between h-28 relative overflow-hidden col-span-1">
-                    <p class="text-[9px] uppercase font-black tracking-wider text-emerald-100/80 leading-tight">Total Bags</p>
-                    <h2 id="hero-total-count" class="text-2xl font-black text-white font-mono leading-none">0</h2>
-                </div>
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md flex flex-col justify-between h-28">
-                    <p class="text-[9px] uppercase font-black tracking-wider text-slate-400 leading-tight">Daily Avg</p>
-                    <div>
-                        <h2 id="hero-daily-avg" class="text-2xl font-black text-slate-100 font-mono leading-none">0.0</h2>
-                        <span class="text-[8px] text-slate-500 font-medium">bags/day</span>
+        <main class="p-4 space-y-4 flex-1">
+            <div id="toast" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-full shadow-xl text-xs tracking-wide transition-all duration-300"></div>
+
+            <!-- MAIN SECTION A: DASHBOARD -->
+            <section id="sect-dashboard" class="space-y-4">
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div class="bg-gradient-to-br from-emerald-600 to-teal-700 p-4 rounded-2xl shadow-lg flex flex-col justify-between h-28 relative overflow-hidden col-span-1">
+                        <p class="text-[9px] uppercase font-black tracking-wider text-emerald-100/80 leading-tight">Total Bags</p>
+                        <h2 id="hero-total-count" class="text-2xl font-black text-white font-mono leading-none">0</h2>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md flex flex-col justify-between h-28">
+                        <p class="text-[9px] uppercase font-black tracking-wider text-slate-400 leading-tight">Daily Avg</p>
+                        <div>
+                            <h2 id="hero-daily-avg" class="text-2xl font-black text-slate-100 font-mono leading-none">0.0</h2>
+                            <span class="text-[8px] text-slate-500 font-medium">bags/day</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md flex flex-col justify-between h-28">
+                        <p class="text-[9px] uppercase font-black tracking-wider text-slate-400 leading-tight">Event Avg</p>
+                        <div>
+                            <h2 id="hero-event-avg" class="text-2xl font-black text-slate-100 font-mono leading-none">0.0</h2>
+                            <span class="text-[8px] text-slate-500 font-medium">bags/trip</span>
+                        </div>
                     </div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md flex flex-col justify-between h-28">
-                    <p class="text-[9px] uppercase font-black tracking-wider text-slate-400 leading-tight">Event Avg</p>
-                    <div>
-                        <h2 id="hero-event-avg" class="text-2xl font-black text-slate-100 font-mono leading-none">0.0</h2>
-                        <span class="text-[8px] text-slate-500 font-medium">bags/trip</span>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Filters -->
-            <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-3 shadow-md">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter Source</label>
-                        <select id="filter-source" onchange="renderHistory()" class="w-full bg-slate-950 rounded-lg p-2 mt-1 text-xs text-slate-200 border border-slate-800 focus:outline-none focus:border-emerald-500"></select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter Size</label>
-                        <select id="filter-size" onchange="renderHistory()" class="w-full bg-slate-950 rounded-lg p-2 mt-1 text-xs text-slate-200 border border-slate-800 focus:outline-none focus:border-emerald-500"></select>
-                    </div>
-                </div>
-            </div>
-
-            <div id="history-container" class="space-y-2"></div>
-        </section>
-
-        <!-- MAIN SECTION B: COMPREHENSIVE STATISTICS (LEFT TAB) -->
-        <section id="sect-stats" class="hidden space-y-4">
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-sm">
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Accumulated Sum</p>
-                    <p id="stat-total-bags" class="text-3xl font-black text-emerald-400 mt-1">0</p>
-                </div>
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-sm">
-                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Collection Events</p>
-                    <p id="stat-total-events" class="text-3xl font-black text-sky-400 mt-1">0</p>
-                </div>
-            </div>
-
-            <div id="stats-insights" class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2 text-xs text-slate-300 shadow-sm">
-                <h4 class="font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-2">Data-Driven Insights</h4>
-                <div class="flex justify-between border-b border-slate-800/60 pb-1.5">
-                    <span>Primary Source:</span>
-                    <span id="insight-top-source" class="font-bold text-slate-100">-</span>
-                </div>
-                <div class="flex justify-between border-b border-slate-800/60 pb-1.5">
-                    <span>Most Common Size:</span>
-                    <span id="insight-top-size" class="font-bold text-slate-100">-</span>
-                </div>
-                <div class="flex justify-between">
-                    <span>Average per Event:</span>
-                    <span id="insight-avg-qty" class="font-bold text-slate-100">-</span>
-                </div>
-            </div>
-
-            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-6 shadow-md">
-                <div>
-                    <h3 class="text-[10px] font-bold text-slate-400 uppercase text-center mb-3 tracking-widest">Distribution by Source</h3>
-                    <div class="h-48 flex justify-center"><canvas id="sourceChart"></canvas></div>
-                </div>
-                <hr class="border-slate-800">
-                <div>
-                    <h3 class="text-[10px] font-bold text-slate-400 uppercase text-center mb-3 tracking-widest">Distribution by Size</h3>
-                    <div class="h-48 flex justify-center"><canvas id="sizeChart"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- MAIN SECTION C: SETTINGS (RIGHT TAB) -->
-        <section id="sect-config" class="hidden space-y-6">
-            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3 shadow-sm">
-                <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wide">Data Migration & Recovery</h3>
-                <div class="grid grid-cols-1 gap-2 pt-1">
-                    <button onclick="exportData()" class="bg-slate-800 hover:bg-slate-700 text-xs py-2.5 font-bold rounded-lg transition text-slate-200 border border-slate-700 shadow-sm">📤 Export Current Backup JSON</button>
-                    
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-3 shadow-md">
                     <div class="grid grid-cols-2 gap-2">
-                        <label class="bg-slate-800 hover:bg-slate-700 text-xs py-2.5 font-bold rounded-lg transition text-center cursor-pointer flex items-center justify-center text-slate-200 border border-slate-700 shadow-sm">
-                            📥 Overwrite / Restore
-                            <input type="file" id="import-file" onchange="importData(event, 'overwrite')" class="hidden" accept=".json">
-                        </label>
-                        <label class="bg-emerald-950/40 hover:bg-emerald-900/40 text-xs py-2.5 font-bold rounded-lg transition text-center cursor-pointer flex items-center justify-center text-emerald-400 border border-emerald-800 shadow-sm">
-                            🧩 Merge & De-duplicate
-                            <input type="file" id="merge-file" onchange="importData(event, 'merge')" class="hidden" accept=".json">
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
-                <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Modify Sources</h3>
-                <div id="config-sources-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
-                <div class="flex space-x-2 pt-1">
-                    <input type="text" id="new-source-name" placeholder="New Source Name" class="bg-slate-950 text-slate-200 rounded-lg px-3 py-1.5 text-xs w-full focus:outline-none border border-slate-800 focus:border-emerald-500">
-                    <button onclick="addMetadata('sources', 'new-source-name')" class="bg-emerald-600 text-xs font-bold px-3 py-1.5 rounded-lg text-white shadow">Add</button>
-                </div>
-            </div>
-
-            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
-                <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Modify Sizes</h3>
-                <div id="config-sizes-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
-                <div class="flex space-x-2 pt-1">
-                    <input type="text" id="new-size-name" placeholder="e.g. XXL" class="bg-slate-950 text-slate-200 rounded-lg px-3 py-1.5 text-xs w-full focus:outline-none border border-slate-800 focus:border-emerald-500">
-                    <button onclick="addMetadata('sizes', 'new-size-name')" class="bg-emerald-600 text-xs font-bold px-3 py-1.5 rounded-lg text-white shadow">Add</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- FLOATING ACTION BUTTON (FAB) RESTORED ABOVE THE NAV PANEL -->
-    <div id="fab-container" class="fixed bottom-24 right-6 z-40">
-        <button onclick="openBottomSheet()" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 rounded-full shadow-xl shadow-emerald-950/40 flex items-center justify-center text-xl active:scale-90 transition-transform text-white border border-emerald-400/20">
-            ➕
-        </button>
-    </div>
-
-    <!-- MODERN MOBILE BOTTOM NAVIGATION BAR -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 shadow-2xl z-40 flex justify-around items-center py-2 px-6 pb-4">
-        <!-- LEFT OPTION: STATS -->
-        <button onclick="switchMainTab('stats')" id="nav-btn-stats" class="flex flex-col items-center space-y-1 transition text-slate-500 group">
-            <span class="text-lg group-active:scale-95 transition-transform">📊</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Stats</span>
-        </button>
-
-        <!-- MIDDLE ENLARGED MAIN OPTION: RECORDS DASHBOARD -->
-        <button onclick="switchMainTab('dashboard')" id="nav-btn-dashboard" class="flex flex-col items-center space-y-1 transition text-emerald-400 scale-110 font-extrabold group">
-            <span class="text-xl group-active:scale-95 transition-transform">📋</span>
-            <span class="text-[10px] font-extrabold uppercase tracking-widest">Records</span>
-        </button>
-
-        <!-- RIGHT OPTION: SETTINGS -->
-        <button onclick="switchMainTab('config')" id="nav-btn-config" class="flex flex-col items-center space-y-1 transition text-slate-500 group">
-            <span class="text-lg group-active:scale-95 transition-transform">⚙️</span>
-            <span class="text-[10px] font-bold uppercase tracking-wider">Settings</span>
-        </button>
-    </nav>
-
-    <!-- BOTTOM SHEET ENTRY & EDIT MODE COMPONENT -->
-    <div id="bottom-sheet-backdrop" onclick="closeBottomSheet()" class="hidden fixed inset-0 bg-slate-950/60 z-50 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
-    <div id="bottom-sheet" class="sheet-close fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900 border-t border-slate-800 rounded-t-3xl z-50 transition-transform duration-300 overflow-hidden shadow-2xl flex flex-col" style="max-height: 85vh;">
-        <div class="w-full flex justify-center py-3.5 cursor-pointer" onclick="closeBottomSheet()">
-            <div class="w-12 h-1 bg-slate-700 rounded-full"></div>
-        </div>
-        
-        <div class="p-5 overflow-y-auto space-y-5 pb-10 flex-1">
-            <h2 class="text-base font-bold text-slate-100 flex items-center justify-between">
-                <span id="sheet-title-text">Log Collection Event</span>
-                <button onclick="closeBottomSheet()" class="text-xs text-slate-500 font-normal hover:text-slate-300">Cancel</button>
-            </h2>
-            <form id="poly-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                <!-- Hidden key field pointer for record operational targets -->
-                <input type="hidden" id="editing-log-id" value="">
-
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Select Source</label>
-                    <div id="source-buttons-container" class="grid grid-cols-2 gap-2"></div>
-                    <input type="hidden" id="selected-source-id" required>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Quantities By Size</label>
-                    <div id="size-matrix-container" class="space-y-2 bg-slate-950 p-3 rounded-xl border border-slate-800/80 max-h-48 overflow-y-auto">
-                        <!-- Instantiated Dynamically -->
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter Source</label>
+                            <select id="filter-source" onchange="renderHistory()" class="w-full bg-slate-950 rounded-lg p-2 mt-1 text-xs text-slate-200 border border-slate-800 focus:outline-none focus:border-emerald-500"></select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Filter Size</label>
+                            <select id="filter-size" onchange="renderHistory()" class="w-full bg-slate-950 rounded-lg p-2 mt-1 text-xs text-slate-200 border border-slate-800 focus:outline-none focus:border-emerald-500"></select>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Collection Timestamp</label>
-                    <input type="datetime-local" id="event-datetime" class="w-full bg-slate-950 text-slate-200 rounded-xl p-3 text-xs font-mono font-bold border border-slate-800 focus:outline-none focus:border-emerald-500">
+                <div id="history-container" class="space-y-2"></div>
+            </section>
+
+            <!-- MAIN SECTION B: STATISTICS -->
+            <section id="sect-stats" class="hidden space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-sm">
+                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Accumulated Sum</p>
+                        <p id="stat-total-bags" class="text-3xl font-black text-emerald-400 mt-1">0</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-sm">
+                        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Collection Events</p>
+                        <p id="stat-total-events" class="text-3xl font-black text-sky-400 mt-1">0</p>
+                    </div>
                 </div>
 
-                <button type="submit" id="sheet-submit-btn" class="w-full mt-2 py-3.5 bg-emerald-600 hover:bg-emerald-500 font-bold rounded-xl transition shadow-lg text-sm text-white border border-emerald-500/20">
-                    Save Collection Event
-                </button>
-            </form>
+                <div id="stats-insights" class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2 text-xs text-slate-300 shadow-sm">
+                    <h4 class="font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-2">Data-Driven Insights</h4>
+                    <div class="flex justify-between border-b border-slate-800/60 pb-1.5">
+                        <span>Primary Source:</span>
+                        <span id="insight-top-source" class="font-bold text-slate-100">-</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-800/60 pb-1.5">
+                        <span>Most Common Size:</span>
+                        <span id="insight-top-size" class="font-bold text-slate-100">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Average per Event:</span>
+                        <span id="insight-avg-qty" class="font-bold text-slate-100">-</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-6 shadow-md">
+                    <div>
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase text-center mb-3 tracking-widest">Distribution by Source</h3>
+                        <div class="h-48 flex justify-center"><canvas id="sourceChart"></canvas></div>
+                    </div>
+                    <hr class="border-slate-800">
+                    <div>
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase text-center mb-3 tracking-widest">Distribution by Size</h3>
+                        <div class="h-48 flex justify-center"><canvas id="sizeChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAIN SECTION C: SETTINGS -->
+            <section id="sect-config" class="hidden space-y-6">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3 shadow-sm">
+                    <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wide">Data Migration & Recovery</h3>
+                    <div class="grid grid-cols-1 gap-2 pt-1">
+                        <button onclick="exportData()" class="bg-slate-800 hover:bg-slate-700 text-xs py-2.5 font-bold rounded-lg transition text-slate-200 border border-slate-700 shadow-sm">📤 Export Current Backup JSON</button>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="bg-slate-800 hover:bg-slate-700 text-xs py-2.5 font-bold rounded-lg transition text-center cursor-pointer flex items-center justify-center text-slate-200 border border-slate-700 shadow-sm">
+                                📥 Overwrite / Restore
+                                <input type="file" id="import-file" onchange="importData(event, 'overwrite')" class="hidden" accept=".json">
+                            </label>
+                            <label class="bg-emerald-950/40 hover:bg-emerald-900/40 text-xs py-2.5 font-bold rounded-lg transition text-center cursor-pointer flex items-center justify-center text-emerald-400 border border-emerald-800 shadow-sm">
+                                🧩 Merge & De-duplicate
+                                <input type="file" id="merge-file" onchange="importData(event, 'merge')" class="hidden" accept=".json">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Modify Sources</h3>
+                    <div id="config-sources-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+                    <div class="flex space-x-2 pt-1">
+                        <input type="text" id="new-source-name" placeholder="New Source Name" class="bg-slate-950 text-slate-200 rounded-lg px-3 py-1.5 text-xs w-full focus:outline-none border border-slate-800 focus:border-emerald-500">
+                        <button onclick="addMetadata('sources', 'new-source-name')" class="bg-emerald-600 text-xs font-bold px-3 py-1.5 rounded-lg text-white shadow">Add</button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                    <h3 class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Modify Sizes</h3>
+                    <div id="config-sizes-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+                    <div class="flex space-x-2 pt-1">
+                        <input type="text" id="new-size-name" placeholder="e.g. XXL" class="bg-slate-950 text-slate-200 rounded-lg px-3 py-1.5 text-xs w-full focus:outline-none border border-slate-800 focus:border-emerald-500">
+                        <button onclick="addMetadata('sizes', 'new-size-name')" class="bg-emerald-600 text-xs font-bold px-3 py-1.5 rounded-lg text-white shadow">Add</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FLOATING ACTION BUTTON - Absolute bounds pinned inside parent mobile layout wrapper -->
+        <div id="fab-container" class="absolute bottom-24 right-6 z-40">
+            <button onclick="openBottomSheet()" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 rounded-full shadow-xl flex items-center justify-center text-xl active:scale-90 transition-all text-white border border-emerald-400/20 cursor-pointer">
+                ➕
+            </button>
         </div>
+
+        <!-- MODERN MOBILE BOTTOM NAVIGATION BAR -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 shadow-2xl z-40 flex justify-around items-center py-2 px-6 pb-4">
+            <button onclick="switchMainTab('stats')" id="nav-btn-stats" class="flex flex-col items-center space-y-1 transition text-slate-500 group cursor-pointer">
+                <span class="text-lg group-active:scale-95 transition-all">📊</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Stats</span>
+            </button>
+
+            <button onclick="switchMainTab('dashboard')" id="nav-btn-dashboard" class="flex flex-col items-center space-y-1 transition text-emerald-400 scale-110 font-extrabold group cursor-pointer">
+                <span class="text-xl group-active:scale-95 transition-all">📋</span>
+                <span class="text-[10px] font-extrabold uppercase tracking-widest">Records</span>
+            </button>
+
+            <button onclick="switchMainTab('config')" id="nav-btn-config" class="flex flex-col items-center space-y-1 transition text-slate-500 group cursor-pointer">
+                <span class="text-lg group-active:scale-95 transition-all">⚙️</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Settings</span>
+            </button>
+        </nav>
+
+        <!-- BOTTOM SHEET -->
+        <div id="bottom-sheet-backdrop" onclick="closeBottomSheet()" class="hidden absolute inset-0 bg-slate-950/60 z-50 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+        <div id="bottom-sheet" class="sheet-close absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 rounded-t-3xl z-50 transition-transform duration-300 overflow-hidden shadow-2xl flex flex-col" style="max-height: 85vh;">
+            <div class="w-full flex justify-center py-3.5 cursor-pointer" onclick="closeBottomSheet()">
+                <div class="w-12 h-1 bg-slate-700 rounded-full"></div>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-5 pb-10 flex-1">
+                <h2 class="text-base font-bold text-slate-100 flex items-center justify-between">
+                    <span id="sheet-title-text">Log Collection Event</span>
+                    <button onclick="closeBottomSheet()" class="text-xs text-slate-500 font-normal hover:text-slate-300">Cancel</button>
+                </h2>
+                <form id="poly-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <input type="hidden" id="editing-log-id" value="">
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Select Source</label>
+                        <div id="source-buttons-container" class="grid grid-cols-2 gap-2"></div>
+                        <input type="hidden" id="selected-source-id" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Quantities By Size</label>
+                        <div id="size-matrix-container" class="space-y-2 bg-slate-950 p-3 rounded-xl border border-slate-800/80 max-h-48 overflow-y-auto">
+                            <!-- Instantiated Dynamically -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Collection Timestamp</label>
+                        <input type="datetime-local" id="event-datetime" class="w-full bg-slate-950 text-slate-200 rounded-xl p-3 text-xs font-mono font-bold border border-slate-800 focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <button type="submit" id="sheet-submit-btn" class="w-full mt-2 py-3.5 bg-emerald-600 hover:bg-emerald-500 font-bold rounded-xl transition shadow-lg text-sm text-white border border-emerald-500/20">
+                        Save Collection Event
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -286,18 +285,18 @@
         function switchMainTab(tabName) {
             ['dashboard', 'stats', 'config'].forEach(t => {
                 document.getElementById(`sect-${t}`).classList.add('hidden');
-                document.getElementById(`nav-btn-${t}`).className = "flex flex-col items-center space-y-1 transition text-slate-500 group";
+                document.getElementById(`nav-btn-${t}`).className = "flex flex-col items-center space-y-1 transition text-slate-500 group cursor-pointer";
             });
             
             const fab = document.getElementById('fab-container');
             if (tabName === 'dashboard') { 
                 fab.classList.remove('hidden');
-                document.getElementById(`nav-btn-dashboard`).className = "flex flex-col items-center space-y-1 transition text-emerald-400 scale-110 font-extrabold group";
+                document.getElementById(`nav-btn-dashboard`).className = "flex flex-col items-center space-y-1 transition text-emerald-400 scale-110 font-extrabold group cursor-pointer";
                 updateDashboardCounters(); 
                 renderHistory(); 
             } else { 
                 fab.classList.add('hidden'); 
-                document.getElementById(`nav-btn-${tabName}`).className = `flex flex-col items-center space-y-1 transition text-sky-400 font-bold group`;
+                document.getElementById(`nav-btn-${tabName}`).className = `flex flex-col items-center space-y-1 transition text-sky-400 font-bold group cursor-pointer`;
             }
 
             if (tabName === 'stats') renderStats();
@@ -305,7 +304,6 @@
         }
 
         function openBottomSheet() {
-            // Re-init panel fields cleanly to base instantiation defaults
             document.getElementById('editing-log-id').value = "";
             document.getElementById('sheet-title-text').textContent = "Log Collection Event";
             document.getElementById('sheet-submit-btn').textContent = "Save Collection Event";
@@ -365,16 +363,16 @@
             const [sources, sizes] = await Promise.all([db.sources.toArray(), db.sizes.toArray()]);
             
             document.getElementById('source-buttons-container').innerHTML = sources.map(s => `
-                <button type="button" data-sid="${s.id}" onclick="selectSource(${s.id})" class="src-btn py-2.5 px-2 bg-slate-950 text-slate-300 rounded-xl border border-slate-800 text-xs font-medium truncate transition-all">${s.name}</button>
+                <button type="button" data-sid="${s.id}" onclick="selectSource(${s.id})" class="src-btn py-2.5 px-2 bg-slate-950 text-slate-300 rounded-xl border border-slate-800 text-xs font-medium truncate transition-all cursor-pointer">${s.name}</button>
             `).join('');
 
             document.getElementById('size-matrix-container').innerHTML = sizes.map(sz => `
                 <div class="flex items-center justify-between bg-slate-900/60 p-2 rounded-lg border border-slate-800/40">
                     <span class="text-xs font-bold font-mono text-slate-300 px-2">${sz.name}</span>
                     <div class="flex items-center space-x-2">
-                        <button type="button" onclick="adjustMatrixQty(${sz.id}, -1)" class="w-7 h-7 bg-slate-800 text-white text-sm font-bold rounded flex items-center justify-center">-</button>
+                        <button type="button" onclick="adjustMatrixQty(${sz.id}, -1)" class="w-7 h-7 bg-slate-800 text-white text-sm font-bold rounded flex items-center justify-center cursor-pointer">-</button>
                         <input type="number" id="matrix-qty-${sz.id}" value="0" min="0" class="w-10 bg-transparent text-center text-xs font-mono font-bold text-slate-100 focus:outline-none">
-                        <button type="button" onclick="adjustMatrixQty(${sz.id}, 1)" class="w-7 h-7 bg-slate-800 text-white text-sm font-bold rounded flex items-center justify-center">+</button>
+                        <button type="button" onclick="adjustMatrixQty(${sz.id}, 1)" class="w-7 h-7 bg-slate-800 text-white text-sm font-bold rounded flex items-center justify-center cursor-pointer">+</button>
                     </div>
                 </div>
             `).join('');
@@ -387,8 +385,8 @@
             document.getElementById('selected-source-id').value = id;
             document.querySelectorAll('.src-btn').forEach(b => {
                 b.className = parseInt(b.dataset.sid) === id 
-                    ? "src-btn py-2.5 px-2 bg-emerald-600/10 text-emerald-400 border border-emerald-500 rounded-xl text-xs font-medium truncate"
-                    : "src-btn py-2.5 px-2 bg-slate-950 text-slate-300 rounded-xl border border-slate-800 text-xs font-medium truncate";
+                    ? "src-btn py-2.5 px-2 bg-emerald-600/10 text-emerald-400 border border-emerald-500 rounded-xl text-xs font-medium truncate cursor-pointer"
+                    : "src-btn py-2.5 px-2 bg-slate-950 text-slate-300 rounded-xl border border-slate-800 text-xs font-medium truncate cursor-pointer";
             });
         }
 
@@ -409,7 +407,6 @@
             const now = Date.now();
             const editIdStr = document.getElementById('editing-log-id').value;
 
-            // Enforce duplicate protection rule logic layers only on brand new entries
             if (!editIdStr && (now - lastSubmissionTime < 5000)) {
                 showToast(`🚫 Anti-duplicate active. Wait ${Math.ceil((5000-(now-lastSubmissionTime))/1000)}s.`);
                 return;
@@ -516,8 +513,8 @@
                                 <span class="text-lg font-black text-slate-100 font-mono">${totalEventQty}</span> <span class="text-[9px] font-bold text-slate-400 uppercase">tot</span>
                             </div>
                             <div class="flex flex-col space-y-1">
-                                <button onclick="openEditSheet(${l.id})" class="text-sky-400 hover:text-sky-300 text-[11px] font-semibold tracking-wide border border-sky-500/20 px-1.5 py-0.5 rounded bg-sky-500/5">Edit</button>
-                                <button onclick="deleteLog(${l.id})" class="text-rose-400 hover:text-rose-300 text-[11px] font-semibold tracking-wide border border-rose-500/20 px-1.5 py-0.5 rounded bg-rose-500/5">Delete</button>
+                                <button onclick="openEditSheet(${l.id})" class="text-sky-400 hover:text-sky-300 text-[11px] font-semibold tracking-wide border border-sky-500/20 px-1.5 py-0.5 rounded bg-sky-500/5 cursor-pointer">Edit</button>
+                                <button onclick="deleteLog(${l.id})" class="text-rose-400 hover:text-rose-300 text-[11px] font-semibold tracking-wide border border-rose-500/20 px-1.5 py-0.5 rounded bg-rose-500/5 cursor-pointer">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -594,14 +591,14 @@
             document.getElementById('config-sources-list').innerHTML = sources.map(s => `
                 <div class="flex items-center space-x-2">
                     <input type="text" value="${s.name}" onchange="updateMetadata('sources', ${s.id}, this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-xs w-full text-slate-200 focus:outline-none">
-                    <button onclick="deleteMetadata('sources', ${s.id})" class="text-rose-400 text-xs px-2 font-bold">✕</button>
+                    <button onclick="deleteMetadata('sources', ${s.id})" class="text-rose-400 text-xs px-2 font-bold cursor-pointer">✕</button>
                 </div>
             `).join('');
 
             document.getElementById('config-sizes-list').innerHTML = sizes.map(sz => `
                 <div class="flex items-center space-x-2">
                     <input type="text" value="${sz.name}" onchange="updateMetadata('sizes', ${sz.id}, this.value)" class="bg-slate-950 border border-slate-600 rounded-lg px-2 py-1.5 text-xs w-full text-slate-200 focus:outline-none">
-                    <button onclick="deleteMetadata('sizes', ${sz.id})" class="text-rose-400 text-xs px-2 font-bold">✕</button>
+                    <button onclick="deleteMetadata('sizes', ${sz.id})" class="text-rose-400 text-xs px-2 font-bold cursor-pointer">✕</button>
                 </div>
             `).join('');
         }
@@ -685,11 +682,20 @@
             event.target.value = ''; 
         }
 
+        // Active Service Worker monitoring listener layer for instant hot updates reload
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('Scope:', reg.scope))
-                .catch(err => console.log('SW Skip:', err));
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Forces the client application container window to live reload assets
+                                window.location.reload();
+                            }
+                        });
+                    });
+                });
             });
         }
     </script>
