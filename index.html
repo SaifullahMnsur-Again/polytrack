@@ -21,10 +21,8 @@
 </head>
 <body class="min-h-screen select-none flex justify-center items-start">
 
-    <!-- Parent Viewport Mockup Boundary Wrapper for Universal Desktop Alignment -->
-    <div class="w-full max-w-md min-h-screen bg-0b0f19 shadow-2xl relative border-x border-slate-900/40 pb-28 flex flex-col">
+    <div class="w-full max-w-md min-h-screen bg-[#0b0f19] shadow-2xl relative border-x border-slate-900/40 pb-28 flex flex-col">
 
-        <!-- Sticky Minimal Top Header Bar -->
         <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3.5 shadow-md text-center">
             <h1 class="text-lg font-black text-emerald-400 tracking-tight flex items-center justify-center gap-1.5">
                 <span>♻️</span> PolyTrack
@@ -34,7 +32,6 @@
         <main class="p-4 space-y-4 flex-1">
             <div id="toast" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-full shadow-xl text-xs tracking-wide transition-all duration-300"></div>
 
-            <!-- MAIN SECTION A: DASHBOARD -->
             <section id="sect-dashboard" class="space-y-4">
                 <div class="grid grid-cols-3 gap-2.5">
                     <div class="bg-gradient-to-br from-emerald-600 to-teal-700 p-4 rounded-2xl shadow-lg flex flex-col justify-between h-28 relative overflow-hidden col-span-1">
@@ -73,7 +70,6 @@
                 <div id="history-container" class="space-y-2"></div>
             </section>
 
-            <!-- MAIN SECTION B: STATISTICS -->
             <section id="sect-stats" class="hidden space-y-4">
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-sm">
@@ -115,7 +111,6 @@
                 </div>
             </section>
 
-            <!-- MAIN SECTION C: SETTINGS -->
             <section id="sect-config" class="hidden space-y-6">
                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3 shadow-sm">
                     <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wide">Data Migration & Recovery</h3>
@@ -155,14 +150,12 @@
             </section>
         </main>
 
-        <!-- FLOATING ACTION BUTTON - Absolute bounds pinned inside parent mobile layout wrapper -->
         <div id="fab-container" class="absolute bottom-24 right-6 z-40">
             <button onclick="openBottomSheet()" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 rounded-full shadow-xl flex items-center justify-center text-xl active:scale-90 transition-all text-white border border-emerald-400/20 cursor-pointer">
                 ➕
             </button>
         </div>
 
-        <!-- MODERN MOBILE BOTTOM NAVIGATION BAR -->
         <nav class="absolute bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 shadow-2xl z-40 flex justify-around items-center py-2 px-6 pb-4">
             <button onclick="switchMainTab('stats')" id="nav-btn-stats" class="flex flex-col items-center space-y-1 transition text-slate-500 group cursor-pointer">
                 <span class="text-lg group-active:scale-95 transition-all">📊</span>
@@ -180,7 +173,6 @@
             </button>
         </nav>
 
-        <!-- BOTTOM SHEET -->
         <div id="bottom-sheet-backdrop" onclick="closeBottomSheet()" class="hidden absolute inset-0 bg-slate-950/60 z-50 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
         <div id="bottom-sheet" class="sheet-close absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 rounded-t-3xl z-50 transition-transform duration-300 overflow-hidden shadow-2xl flex flex-col" style="max-height: 85vh;">
             <div class="w-full flex justify-center py-3.5 cursor-pointer" onclick="closeBottomSheet()">
@@ -204,8 +196,7 @@
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Quantities By Size</label>
                         <div id="size-matrix-container" class="space-y-2 bg-slate-950 p-3 rounded-xl border border-slate-800/80 max-h-48 overflow-y-auto">
-                            <!-- Instantiated Dynamically -->
-                        </div>
+                            </div>
                     </div>
 
                     <div>
@@ -285,7 +276,7 @@
         function switchMainTab(tabName) {
             ['dashboard', 'stats', 'config'].forEach(t => {
                 document.getElementById(`sect-${t}`).classList.add('hidden');
-                document.getElementById(`nav-btn-${t}`).className = "flex flex-col items-center space-y-1 transition text-slate-500 group cursor-pointer";
+                document.getElementById(`nav-btn-${t}`).className = "flex flex-col items-center space-y-1 transition text-slate-500 group";
             });
             
             const fab = document.getElementById('fab-container');
@@ -443,7 +434,10 @@
                 await db.logs.update(targetId, recordPayload);
                 showToast("✏️ Collection entry updated.");
             } else {
-                await db.logs.add(recordPayload);
+                await db.logs.add({
+                    ...recordPayload,
+                    datetime: new Date().toISOString() // Fallback to live automated execution stamp on new submissions
+                });
                 lastSubmissionTime = Date.now();
                 showToast("✅ Collection event saved.");
             }
@@ -508,13 +502,17 @@
                             </div>
                             <div class="flex flex-wrap gap-1">${chipsHtml}</div>
                         </div>
-                        <div class="text-right flex items-center space-x-2 shrink-0">
+                        <div class="text-right flex items-center space-x-3 shrink-0">
                             <div class="mr-1">
                                 <span class="text-lg font-black text-slate-100 font-mono">${totalEventQty}</span> <span class="text-[9px] font-bold text-slate-400 uppercase">tot</span>
                             </div>
-                            <div class="flex flex-col space-y-1">
-                                <button onclick="openEditSheet(${l.id})" class="text-sky-400 hover:text-sky-300 text-[11px] font-semibold tracking-wide border border-sky-500/20 px-1.5 py-0.5 rounded bg-sky-500/5 cursor-pointer">Edit</button>
-                                <button onclick="deleteLog(${l.id})" class="text-rose-400 hover:text-rose-300 text-[11px] font-semibold tracking-wide border border-rose-500/20 px-1.5 py-0.5 rounded bg-rose-500/5 cursor-pointer">Delete</button>
+                            <div class="flex space-x-2">
+                                <button onclick="openEditSheet(${l.id})" class="text-sky-400 hover:text-sky-300 p-2 rounded-lg border border-sky-500/10 bg-sky-500/5 transition-colors cursor-pointer" title="Edit Entry">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-3.536L6.5 16.5H3v-3.5l10.732-10.732z"></path></svg>
+                                </button>
+                                <button onclick="deleteLog(${l.id})" class="text-rose-400 hover:text-rose-300 p-2 rounded-lg border border-rose-500/10 bg-rose-500/5 transition-colors cursor-pointer" title="Delete Entry">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -682,7 +680,6 @@
             event.target.value = ''; 
         }
 
-        // Active Service Worker monitoring listener layer for instant hot updates reload
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').then(reg => {
@@ -690,7 +687,6 @@
                         const newWorker = reg.installing;
                         newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // Forces the client application container window to live reload assets
                                 window.location.reload();
                             }
                         });
