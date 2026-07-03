@@ -1,4 +1,4 @@
-const CACHE_NAME = 'polytrack-pro-v4';
+const CACHE_NAME = 'polytrack-v5';
 const ASSETS = [
     './',
     './index.html',
