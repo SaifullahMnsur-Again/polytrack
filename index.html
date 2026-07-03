@@ -19,17 +19,12 @@
         }
     </style>
 </head>
-<body class="min-h-screen pb-24 select-none">
+<body class="min-h-screen pb-28 select-none">
 
-    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3 shadow-lg flex justify-between items-center">
-        <h1 class="text-xl font-extrabold text-emerald-400 tracking-tight flex items-center gap-2">
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3.5 shadow-md text-center">
+        <h1 class="text-lg font-black text-emerald-400 tracking-tight flex items-center justify-center gap-1.5">
             <span>♻️</span> PolyTrack
         </h1>
-        <div class="flex space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
-            <button onclick="switchMainTab('dashboard')" id="btn-main-dashboard" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-emerald-600 text-white">Records</button>
-            <button onclick="switchMainTab('stats')" id="btn-main-stats" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-slate-200">Stats</button>
-            <button onclick="switchMainTab('config')" id="btn-main-config" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-slate-200">Settings</button>
-        </div>
     </header>
 
     <main class="max-w-md mx-auto p-4 space-y-4">
@@ -56,6 +51,10 @@
                     </div>
                 </div>
             </div>
+
+            <button onclick="openBottomSheet()" class="w-full py-3.5 bg-slate-900 border border-slate-800/80 hover:border-emerald-500/30 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-slate-300 tracking-wide transition-all shadow-sm active:scale-[0.99]">
+                <span class="text-emerald-400 text-sm">➕</span> Log New Collection Event
+            </button>
 
             <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-3 shadow-md">
                 <div class="grid grid-cols-2 gap-2">
@@ -153,11 +152,22 @@
         </section>
     </main>
 
-    <div id="fab-container" class="fixed bottom-6 right-6 z-40">
-        <button onclick="openBottomSheet()" class="w-14 h-14 bg-emerald-600 hover:bg-emerald-500 rounded-full shadow-xl shadow-emerald-950/40 flex items-center justify-center text-xl active:scale-90 transition-transform text-white border border-emerald-400/20">
-            ➕
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 shadow-2xl z-40 flex justify-around items-center py-2 px-6 pb-4">
+        <button onclick="switchMainTab('stats')" id="nav-btn-stats" class="flex flex-col items-center space-y-1 transition text-slate-500 group">
+            <span class="text-lg group-active:scale-95 transition-transform">📊</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Stats</span>
         </button>
-    </div>
+
+        <button onclick="switchMainTab('dashboard')" id="nav-btn-dashboard" class="flex flex-col items-center space-y-1 transition text-emerald-400 group">
+            <span class="text-xl group-active:scale-95 transition-transform">📋</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-widest">Records</span>
+        </button>
+
+        <button onclick="switchMainTab('config')" id="nav-btn-config" class="flex flex-col items-center space-y-1 transition text-slate-500 group">
+            <span class="text-lg group-active:scale-95 transition-transform">⚙️</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Settings</span>
+        </button>
+    </nav>
 
     <div id="bottom-sheet-backdrop" onclick="closeBottomSheet()" class="hidden fixed inset-0 bg-slate-950/60 z-50 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
     <div id="bottom-sheet" class="sheet-close fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900 border-t border-slate-800 rounded-t-3xl z-50 transition-transform duration-300 overflow-hidden shadow-2xl flex flex-col" style="max-height: 85vh;">
@@ -196,7 +206,6 @@
     </div>
 
     <script>
-        // Relational schema configuration without indexing fields that are structural arrays
         const db = new Dexie("PolyTrackProDB");
         db.version(2).stores({
             logs: '++id, sourceId, datetime', 
@@ -257,18 +266,17 @@
             document.getElementById('hero-event-avg').textContent = (totalBags / eventCount).toFixed(1);
         }
 
+        // Updated for Navigation Bar highlighting classes
         function switchMainTab(tabName) {
             ['dashboard', 'stats', 'config'].forEach(t => {
                 document.getElementById(`sect-${t}`).classList.add('hidden');
-                document.getElementById(`btn-main-${t}`).className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-slate-200";
+                document.getElementById(`nav-btn-${t}`).className = "flex flex-col items-center space-y-1 transition text-slate-500 group";
             });
+            
             document.getElementById(`sect-${tabName}`).classList.remove('hidden');
-            document.getElementById(`btn-main-${tabName}`).className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-emerald-600 text-white shadow";
+            document.getElementById(`nav-btn-${tabName}`).className = `flex flex-col items-center space-y-1 transition ${tabName === 'dashboard' ? 'text-emerald-400 font-extrabold' : 'text-sky-400 font-bold'} group`;
 
-            const fab = document.getElementById('fab-container');
-            if (tabName === 'dashboard') { fab.classList.remove('hidden'); updateDashboardCounters(); renderHistory(); }
-            else { fab.classList.add('hidden'); }
-
+            if (tabName === 'dashboard') { updateDashboardCounters(); renderHistory(); }
             if (tabName === 'stats') renderStats();
             if (tabName === 'config') renderConfigPanel();
         }
@@ -345,7 +353,7 @@
                 return;
             }
             if(!selectedSourceId) {
-                showToast("⚠️ Select a source.");
+                showToast("⚠️ Select a source container.");
                 return;
             }
 
@@ -519,7 +527,7 @@
 
             document.getElementById('config-sizes-list').innerHTML = sizes.map(sz => `
                 <div class="flex items-center space-x-2">
-                    <input type="text" value="${sz.name}" onchange="updateMetadata('sizes', ${sz.id}, this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-xs w-full text-slate-200 focus:outline-none">
+                    <input type="text" value="${sz.name}" onchange="updateMetadata('sizes', ${sz.id}, this.value)" class="bg-slate-950 border border-slate-600 rounded-lg px-2 py-1.5 text-xs w-full text-slate-200 focus:outline-none">
                     <button onclick="deleteMetadata('sizes', ${sz.id})" class="text-rose-400 text-xs px-2 font-bold">✕</button>
                 </div>
             `).join('');
@@ -528,7 +536,7 @@
         async function updateMetadata(table, id, newVal) {
             if(!newVal.trim()) return;
             await db[table].update(id, { name: newVal.trim() });
-            showToast("✏ Beyanlar güncellendi.");
+            showToast("✏️ Mappings modified.");
         }
 
         async function addMetadata(table, inputId) {
